@@ -128,12 +128,12 @@ def process_n3_file(ontology: str | Path | Graph) -> Tuple[Graph, Graph]:
     _create_node_shapes_for_properties(ont_graph, sh_graph, OWL.ObjectProperty)
     _create_node_shapes_for_properties(ont_graph, sh_graph, OWL.DatatypeProperty)
 
-    # sh_graph.serialize(destination=Path("../IES Specification Docs/ont.file.ttl"), format="turtle")
+    sh_graph.serialize(destination=Path("../IES Specification Docs/EIS4-new.ttl"), format="turtle")
     return ont_graph, sh_graph
 
 
 def rdf_validate(data_file: str | Graph, ont_graph: str | Graph, sh_graph: str | Graph) -> Tuple[
-    bool, Graph, str]:
+        bool, Graph, str]:
     # run shacl validation
     conforms, results_graph, results_text = validate(data_file,
                                                      shacl_graph=sh_graph,
