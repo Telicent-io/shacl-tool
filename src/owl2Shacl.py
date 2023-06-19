@@ -6,6 +6,7 @@ from rdflib.term import URIRef, BNode, Literal, Node
 from itertools import chain
 
 SH_CLASS = URIRef("http://www.w3.org/ns/shacl#class")
+SH_OR = URIRef("http://www.w3.org/ns/shacl#or")
 
 
 def _insert_list_item(sh_graph: Graph, ont_graph: Graph, item: Node, tgt_typ: URIRef) -> Node:
@@ -35,7 +36,7 @@ def _add_shape_triples_to_graph(ont_graph, sh_graph, property_type, prop, target
             item = ont_graph.value(subject=target, predicate=OWL.unionOf)
             if item:
                 # add the shacl 'or' pointing to the list bnode
-                sh_graph.add((URIRef(str(prop) + shape_suffix), URIRef("http://www.w3.org/ns/shacl#or"), item))
+                sh_graph.add((URIRef(str(prop) + shape_suffix), SH_OR, item))
                 # add triples for first item in the list
                 rest = _insert_list_item(sh_graph, ont_graph, item, tgt_typ)
                 # add triples for remaining list items
@@ -113,10 +114,10 @@ def _create_node_shapes_for_classes(ont_graph: Graph, sh_graph: Graph) -> None:
                             sh_graph.add((property_shape, SH.maxCount, qexact))
 
 
-def process_n3_file(ontology: str | Path | Graph):
+def process_n3_file(ontology: str | Path | Graph) -> Tuple[Graph, Graph]:
     if isinstance(ontology, (Path, str)):
         ont_graph = Graph().parse(ontology)
-    else :
+    else:
         ont_graph = ontology
     sh_graph = Graph()
     # bind namespaces from ontology to shape graph
