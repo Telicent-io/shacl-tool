@@ -1,3 +1,5 @@
+import argparse
+import sys
 from pathlib import Path
 from typing import Tuple
 from pyshacl import validate
@@ -114,7 +116,7 @@ def _create_node_shapes_for_classes(ont_graph: Graph, sh_graph: Graph) -> None:
                             sh_graph.add((property_shape, SH.maxCount, qexact))
 
 
-def process_n3_file(ontology: str | Path | Graph) -> Tuple[Graph, Graph]:
+def create_shacl(ontology: str | Path | Graph) -> Tuple[Graph, Graph]:
     if isinstance(ontology, (Path, str)):
         ont_graph = Graph().parse(ontology)
     else:
@@ -128,7 +130,6 @@ def process_n3_file(ontology: str | Path | Graph) -> Tuple[Graph, Graph]:
     _create_node_shapes_for_properties(ont_graph, sh_graph, OWL.ObjectProperty)
     _create_node_shapes_for_properties(ont_graph, sh_graph, OWL.DatatypeProperty)
 
-    sh_graph.serialize(destination=Path("../IES Specification Docs/EIS4-new.ttl"), format="turtle")
     return ont_graph, sh_graph
 
 
@@ -148,3 +149,28 @@ def rdf_validate(data_file: str | Graph, ont_graph: str | Graph, sh_graph: str |
                                                      debug=False)
 
     return conforms, results_graph, results_text
+
+def _parse_args(argv):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o", "--ontology", help="Path to ontology - required", required=True)
+    parser.add_argument("-v", "--validate", help="Path of file to validate", default=None)
+    parser.add_argument("-s", "--shacl", help="Location for resulting shapes graph", default=None)
+
+    return parser.parse_args()
+
+
+def main(argv):
+    args = _parse_args(argv)
+    if args.ontology:
+        ont_graph, sh_graph = create_shacl(args.ontology)
+        if args.shacl:
+            if args.validate:
+                conforms, results_graph, results_text = rdf_validate(args.validate, ont_graph, sh_graph)
+                print(results_text)
+            else:
+                sh_graph.serialize(forat="turtle", destination=args.shacl)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
+

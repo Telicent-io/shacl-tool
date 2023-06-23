@@ -1,7 +1,7 @@
 import unittest
 from pathlib import Path
 from rdflib.compare import isomorphic
-from src.owl2Shacl import process_n3_file, rdf_validate
+from src.owl2Shacl import create_shacl, rdf_validate
 from rdflib import Graph, SH, BNode, RDF, XSD, Literal, Namespace, OWL, RDFS
 from rdflib.term import URIRef
 
@@ -23,7 +23,7 @@ class TestOwl2Shacl(unittest.TestCase):
         expected_result.add((vrep, SH.conforms, Literal("true", datatype=XSD.boolean)))
         # ont_file = Path("IES Specification Docs/Information Exchange Standard r4.2.0.n3")
         ont_file = Path("IES Specification Docs/IES4.ttl")
-        ont_graph, sh_graph = process_n3_file(ont_file)
+        ont_graph, sh_graph = create_shacl(ont_file)
         conforms, results_graph, results_text = rdf_validate(
             "../Sample Data/hospital.ttl", ont_graph, sh_graph)
         self.assertTrue(conforms)
@@ -54,7 +54,7 @@ class TestOwl2Shacl(unittest.TestCase):
 
         ont_file = Path("IES Specification Docs/Information Exchange Standard r4.2.0.n3")
 
-        ont_graph, sh_graph = process_n3_file(ont_file)
+        ont_graph, sh_graph = create_shacl(ont_file)
         conforms, results_graph, results_text = rdf_validate(data_graph, ont_graph, sh_graph)
         print(results_graph.serialize(format="turtle"))
         self.assertFalse(conforms)
@@ -87,7 +87,7 @@ class TestOwl2Shacl(unittest.TestCase):
 
         ont_file = Path("IES Specification Docs/Information Exchange Standard r4.2.0.n3")
 
-        ont_graph, sh_graph = process_n3_file(ont_file)
+        ont_graph, sh_graph = create_shacl(ont_file)
         conforms, results_graph, results_text = rdf_validate(data_graph, ont_graph, sh_graph)
         res = results_graph.serialize(format="turtle")
         print(res)
@@ -119,7 +119,7 @@ class TestOwl2Shacl(unittest.TestCase):
 
         ont_file = Path("IES Specification Docs/Information Exchange Standard r4.2.0.n3")
 
-        ont_graph, sh_graph = process_n3_file(ont_file)
+        ont_graph, sh_graph = create_shacl(ont_file)
         conforms, results_graph, results_text = rdf_validate(data_graph, ont_graph, sh_graph)
         res = results_graph.serialize(format="turtle")
         print(res)
@@ -165,7 +165,7 @@ class TestOwl2Shacl(unittest.TestCase):
 
         ont_file = Path("IES Specification Docs/Information Exchange Standard r4.2.0.n3")
 
-        ont_graph, sh_graph = process_n3_file(ont_file)
+        ont_graph, sh_graph = create_shacl(ont_file)
         conforms, results_graph, results_text = rdf_validate(data_graph, ont_graph, sh_graph)
         print(results_graph.serialize(format="turtle"))
         self.assertFalse(conforms)
@@ -225,7 +225,7 @@ class TestOwl2Shacl(unittest.TestCase):
         ont_graph.add((cls3, RDF.first, IES.TravelTicket))
         ont_graph.add((cls3, RDF.rest, RDF.nil))
 
-        new_ont_graph, sh_graph = process_n3_file(ont_graph)
+        new_ont_graph, sh_graph = create_shacl(ont_graph)
         print(ont_graph.serialize(format="turtle"))
         print(expected_result.serialize(format="turtle"))
         print(sh_graph.serialize(format="turtle"))
@@ -285,7 +285,7 @@ class TestOwl2Shacl(unittest.TestCase):
         ont_graph.add((dt3, RDF.first, XSD.integer))
         ont_graph.add((dt3, RDF.rest, RDF.nil))
 
-        new_ont_graph, sh_graph = process_n3_file(ont_graph)
+        new_ont_graph, sh_graph = create_shacl(ont_graph)
         print(ont_graph.serialize(format="turtle"))
         print(expected_result.serialize(format="turtle"))
         print(sh_graph.serialize(format="turtle"))
@@ -295,7 +295,7 @@ class TestOwl2Shacl(unittest.TestCase):
     def test_class_shapes(self):
         expected_result = Graph().parse('test/expected_results/test_class_shapes.ttl')
         ont_file = Path("test/TestOntology.ttl")
-        new_ont_graph, sh_graph = process_n3_file(ont_file)
+        new_ont_graph, sh_graph = create_shacl(ont_file)
         print(expected_result.serialize(format="turtle"))
         print(sh_graph.serialize(format="turtle"))
         assert isomorphic(expected_result, sh_graph)
