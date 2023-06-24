@@ -12,8 +12,8 @@
 @base <http://test.data#> .
 
 <http://test.data#> rdf:type owl:Ontology ;
-                     rdfs:comment "A ontology to test shacl shape creation from owl ontology" ;
-                     rdfs:label "Test Ontology" .
+                    rdfs:comment "A ontology to test shacl shape creation from owl ontology" ;
+                    rdfs:label "Test Ontology" .
 
 #################################################################
 #    Datatypes
@@ -28,14 +28,14 @@ xsd:date rdf:type rdfs:Datatype .
 #################################################################
 
 ###  http://test.data#testObjectProperty
-:testObjectProperty rdf:type owl:ObjectProperty ;
-                    rdfs:domain [ rdf:type owl:Class ;
-                                  owl:unionOf ( :TestClassA
-                                                :TestClassB
-                                              )
-                                ] ;
-                    rdfs:range :TestClassC ;
-                    rdfs:label "test object property" .
+td:testObjectProperty rdf:type owl:ObjectProperty ;
+                      rdfs:domain [ rdf:type owl:Class ;
+                                    owl:unionOf ( td:TestClassA
+                                                  td:TestClassB
+                                             )
+                               ] ;
+                      rdfs:range td:TestClassC ;
+                      rdfs:label "test object property" .
 
 
 #################################################################
@@ -43,24 +43,24 @@ xsd:date rdf:type rdfs:Datatype .
 #################################################################
 
 ###  http://test.data#testDataTypeProperty
-:testDataTypeProperty rdf:type owl:DatatypeProperty ;
-                      rdfs:domain [ rdf:type owl:Class ;
-                                    owl:unionOf ( :TestClassA
-                                                  :TestClassB
-                                                )
-                                  ] ;
-                      rdfs:range [ rdf:type rdfs:Datatype ;
-                                   owl:unionOf ( xsd:boolean
-                                                 xsd:date
-                                                 xsd:integer
+td:testDataTypeProperty rdf:type owl:DatatypeProperty ;
+                        rdfs:domain [ rdf:type owl:Class ;
+                                      owl:unionOf ( td:TestClassA
+                                                    td:TestClassB
                                                )
                                  ] ;
-                      rdfs:label "test data property" .
+                        rdfs:range [ rdf:type rdfs:Datatype ;
+                                     owl:unionOf ( xsd:boolean
+                                                   xsd:date
+                                                   xsd:integer
+                                              )
+                                 ] ;
+                        rdfs:label "test data property" .
 
 
 ###  http://test.data#testDatatypeProperty2
-:testDatatypeProperty2 rdf:type owl:DatatypeProperty ;
-                       rdfs:label "test data property 2" .
+td:testDatatypeProperty2 rdf:type owl:DatatypeProperty ;
+                         rdfs:label "test data property 2" .
 
 
 #################################################################
@@ -68,51 +68,58 @@ xsd:date rdf:type rdfs:Datatype .
 #################################################################
 
 ###  http://test.data#TestClassA
-:TestClassA rdf:type owl:Class ;
-            rdfs:subClassOf [ rdf:type owl:Restriction ;
-                              owl:onProperty :testObjectProperty ;
-                              owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                              owl:onClass :TestClassD
-                            ] ,
-                            [ rdf:type owl:Restriction ;
-                              owl:onProperty :testObjectProperty ;
-                              owl:maxQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
-                              owl:onClass :TestClassD
-                            ] ;
-            rdfs:label "Test Class A" .
+td:TestClassA rdf:type owl:Class ;
+              rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                owl:onProperty td:testObjectProperty ;
+                                owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                owl:onClass td:TestClassD
+                       ] ,
+              [ rdf:type owl:Restriction ;
+                owl:onProperty td:testObjectProperty ;
+                owl:maxQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+                owl:onClass td:TestClassD
+                       ] ;
+              rdfs:label "Test Class A" .
 
 
 ###  http://test.data#TestClassB
-:TestClassB rdf:type owl:Class ;
-            rdfs:subClassOf [ rdf:type owl:Restriction ;
-                              owl:onProperty :testObjectProperty ;
-                              owl:someValuesFrom :TestClassD
-                            ] ;
-            rdfs:label "Test Class B" .
+td:TestClassB rdf:type owl:Class ;
+              rdfs:subClassOf [ rdf:type owl:Class ;
+                                owl:unionOf ( [ rdf:type owl:Restriction ;
+                                                owl:onProperty td:testObjectProperty ;
+                                                owl:someValuesFrom td:TestClassA
+                                              ]
+                                              [ rdf:type owl:Restriction ;
+                                                owl:onProperty td:testObjectProperty ;
+                                                owl:someValuesFrom td:TestClassD
+                                              ]
+                                         )
+                       ] ;
+              rdfs:label "Test Class B" .
 
 
 ###  http://test.data#TestClassC
-:TestClassC rdf:type owl:Class ;
-            rdfs:subClassOf :TestClassA ,
-                            [ rdf:type owl:Restriction ;
-                              owl:onProperty :testObjectProperty ;
-                              owl:allValuesFrom :TestClassD
-                            ] ,
-                            [ rdf:type owl:Restriction ;
-                              owl:onProperty :testObjectProperty ;
-                              owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                              owl:onClass :TestClassD
-                            ] ;
-            rdfs:label "Test Class C" .
+td:TestClassC rdf:type owl:Class ;
+              rdfs:subClassOf td:TestClassA ,
+              [ rdf:type owl:Restriction ;
+                owl:onProperty td:testObjectProperty ;
+                owl:allValuesFrom td:TestClassD
+                       ] ,
+              [ rdf:type owl:Restriction ;
+                owl:onProperty td:testObjectProperty ;
+                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                owl:onClass td:TestClassD
+                       ] ;
+              rdfs:label "Test Class C" .
 
 
 ###  http://test.data#TestClassD
-:TestClassD rdf:type owl:Class ;
-            rdfs:subClassOf [ rdf:type owl:Restriction ;
-                              owl:onProperty :testDatatypeProperty2 ;
-                              owl:cardinality "1"^^xsd:nonNegativeInteger
-                            ] ;
-            rdfs:label "Test Class D" .
+td:TestClassD rdf:type owl:Class ;
+              rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                owl:onProperty td:testDatatypeProperty2 ;
+                                owl:cardinality "1"^^xsd:nonNegativeInteger
+                       ] ;
+              rdfs:label "Test Class D" .
 
 
 ###  Generated by the OWL API (version 4.5.25.2023-02-15T19:15:49Z) https://github.com/owlcs/owlapi

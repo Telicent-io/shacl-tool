@@ -4,45 +4,47 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 td:TestClassAShape
-    a              sh:NodeShape ;
-    sh:severity    sh:Warning ;
-    sh:targetClass td:TestClassA ;
-    sh:property    [ sh:path         td:testObjectProperty ;
-                     sh:class        td:TestClassD ;
-                     sh:minCount "1"^^xsd:nonNegativeInteger ;
-                   ] ,
-                   [ sh:path         td:testObjectProperty ;
-                     sh:class        td:TestClassD ;
-                     sh:maxCount "2"^^xsd:nonNegativeInteger ;
-                   ] .
+    a               sh:NodeShape ;
+    sh:property     [ sh:class td:TestClassD ;
+                      sh:maxCount
+                             "2"^^xsd:nonNegativeInteger ;
+                      sh:path  td:testObjectProperty ] ,
+                    [ sh:class td:TestClassD ;
+                      sh:minCount
+                             "1"^^xsd:nonNegativeInteger ;
+                      sh:path  td:testObjectProperty ] ;
+    sh:severity     sh:Warning ;
+    sh:targetClass  td:TestClassA .
 
 td:TestClassBShape
     a              sh:NodeShape ;
+    sh:or          ( [ sh:class    td:TestClassA ;
+                       sh:minCount "1"^^xsd:nonNegativeInteger ;
+                       sh:path     td:testObjectProperty ]
+                     [ sh:class    td:TestClassD ;
+                       sh:minCount "1"^^xsd:nonNegativeInteger ;
+                       sh:path     td:testObjectProperty ] ) ;
     sh:severity    sh:Warning ;
-    sh:targetClass td:TestClassB ;
-    sh:property    [ sh:path     td:testObjectProperty ;
-                     sh:class td:TestClassD ;
-                     sh:minCount "1"^^xsd:nonNegativeInteger ;
-                   ] .
+    sh:targetClass td:TestClassB .
 
 td:TestClassCShape
-    a              sh:NodeShape ;
-    sh:severity    sh:Warning ;
-    sh:targetClass td:TestClassC ;
-    sh:xone        ( [ sh:class td:TestClassD ;
-                       sh:path td:testObjectProperty ] ) ;
-    sh:property    [ sh:path     td:testObjectProperty ;
-                     sh:class    td:TestClassD ;
-                     sh:maxCount "1"^^xsd:nonNegativeInteger ;
-                     sh:minCount "1"^^xsd:nonNegativeInteger ; ]  .
+    a sh:NodeShape ;
+    sh:property     [ sh:class td:TestClassD ;
+                      sh:path  td:testObjectProperty ] ,
+                    [ sh:class    td:TestClassD ;
+                      sh:maxCount "1"^^xsd:nonNegativeInteger ;
+                      sh:minCount "1"^^xsd:nonNegativeInteger ;
+                      sh:path     td:testObjectProperty ] ;
+    sh:severity     sh:Warning ;
+    sh:targetClass  td:TestClassC .
 
 td:TestClassDShape
     a              sh:NodeShape ;
+    sh:property    [ sh:maxCount "1"^^xsd:nonNegativeInteger ;
+                     sh:minCount "1"^^xsd:nonNegativeInteger ;
+                     sh:path     td:testDatatypeProperty2 ] ;
     sh:severity    sh:Warning ;
-    sh:targetClass td:TestClassD ;
-    sh:property [ sh:minCount "1"^^xsd:nonNegativeInteger ;
-                  sh:maxCount "1"^^xsd:nonNegativeInteger ;
-                  sh:path     td:testDatatypeProperty2 ] ;.
+    sh:targetClass td:TestClassD .
 
 td:testDataTypePropertyDomainShape
     a                   sh:NodeShape ;
@@ -67,4 +69,3 @@ td:testObjectPropertyRangeShape
     sh:class           td:TestClassC ;
     sh:severity        sh:Warning ;
     sh:targetObjectsOf td:testObjectProperty .
-
