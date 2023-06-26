@@ -46,25 +46,25 @@ td:TestClassDShape
     sh:severity    sh:Warning ;
     sh:targetClass td:TestClassD .
 
-td:testDataTypePropertyDomainShape
+td:TestDataTypePropertyDomainShape
     a                   sh:NodeShape ;
     sh:or               ( [ sh:class td:TestClassA ] [ sh:class td:TestClassB ] ) ;
     sh:severity         sh:Warning ;
     sh:targetSubjectsOf td:testDataTypeProperty .
 
-td:testDataTypePropertyRangeShape
+td:TestDataTypePropertyRangeShape
     a                  sh:NodeShape ;
     sh:or              ( [ sh:datatype xsd:boolean ] [ sh:datatype xsd:date ] [ sh:datatype xsd:integer ] ) ;
     sh:severity        sh:Warning ;
     sh:targetObjectsOf td:testDataTypeProperty .
 
-td:testObjectPropertyDomainShape
+td:TestObjectPropertyDomainShape
     a                   sh:NodeShape ;
     sh:or               ( [ sh:class td:TestClassA ] [ sh:class td:TestClassB ] ) ;
     sh:severity         sh:Warning ;
     sh:targetSubjectsOf td:testObjectProperty .
 
-td:testObjectPropertyRangeShape
+td:TestObjectPropertyRangeShape
     a                  sh:NodeShape ;
     sh:class           td:TestClassC ;
     sh:severity        sh:Warning ;

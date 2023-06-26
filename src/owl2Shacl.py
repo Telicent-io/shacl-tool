@@ -22,9 +22,9 @@ def _insert_list_item(sh_graph: Graph, ont_graph: Graph, item: Node, tgt_typ: UR
     return rest
 
 
-def _add_shape_triples_to_graph(ont_graph, sh_graph, property_type, prop, targets, shape_suffix):
+def _add_shape_triples_to_graph(ont_graph, sh_graph, property_type, property_shape, targets, prop):
     tgt_typ = SH_CLASS
-    if shape_suffix == "DomainShape":
+    if "DomainShape" in str(property_shape):
         tgt = SH.targetSubjectsOf
     else:
         tgt = SH.targetObjectsOf
@@ -32,14 +32,14 @@ def _add_shape_triples_to_graph(ont_graph, sh_graph, property_type, prop, target
             tgt_typ = SH.datatype
 
     for target in targets:
-        sh_graph.add((URIRef(str(prop) + shape_suffix), RDF.type, SH.NodeShape), )
-        sh_graph.add((URIRef(str(prop) + shape_suffix), tgt, prop))
-        sh_graph.add((URIRef(str(prop) + shape_suffix), SH.severity, SH.Warning))
+        sh_graph.add((property_shape, RDF.type, SH.NodeShape), )
+        sh_graph.add((property_shape, tgt, prop))
+        sh_graph.add((property_shape, SH.severity, SH.Warning))
         if type(target) is BNode:
             item = ont_graph.value(subject=target, predicate=OWL.unionOf)
             if item:
                 # add the shacl 'or' pointing to the list bnode
-                sh_graph.add((URIRef(str(prop) + shape_suffix), SH_OR, item))
+                sh_graph.add((property_shape, SH_OR, item))
                 # add triples for first item in the list
                 rest = _insert_list_item(sh_graph, ont_graph, item, tgt_typ)
                 # add triples for remaining list items
@@ -47,19 +47,25 @@ def _add_shape_triples_to_graph(ont_graph, sh_graph, property_type, prop, target
                     item = rest
                     rest = _insert_list_item(sh_graph, ont_graph, item, tgt_typ)
         else:
-            sh_graph.add((URIRef(str(prop) + shape_suffix), tgt_typ, target))
+            sh_graph.add((property_shape, tgt_typ, target))
 
 
 def _create_node_shapes_for_properties(ont_graph, sh_graph, property_type):
     for prop in ont_graph.subjects(predicate=RDF.type, object=property_type):
         # process domains
+        prop_shape_base = str(prop)
+        for name, ns in sh_graph.namespaces():
+            if ns in prop:
+                prop_name = URIRef(prop).removeprefix(ns)
+                capitalized_prop_name = prop_name[0].upper() + prop_name[1:]
+                prop_shape_base = ns + capitalized_prop_name
         targets = ont_graph.objects(subject=prop, predicate=RDFS.domain)
-        shape_suffix = "DomainShape"
-        _add_shape_triples_to_graph(ont_graph, sh_graph, property_type, prop, targets, shape_suffix)
+        property_shape = URIRef(prop_shape_base + "DomainShape")
+        _add_shape_triples_to_graph(ont_graph, sh_graph, property_type, property_shape, targets, prop)
         # process_ranges
         targets = ont_graph.objects(subject=prop, predicate=RDFS.range)
-        shape_suffix = "RangeShape"
-        _add_shape_triples_to_graph(ont_graph, sh_graph, property_type, prop, targets, shape_suffix)
+        property_shape = URIRef(prop_shape_base + "RangeShape")
+        _add_shape_triples_to_graph(ont_graph, sh_graph, property_type, property_shape, targets, prop)
 
 
 def bind_restriction_values( ont_graph, restriction: Node):

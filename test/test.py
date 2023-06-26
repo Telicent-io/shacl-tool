@@ -1,4 +1,6 @@
+import sys
 import unittest
+import logging
 from pathlib import Path
 from rdflib.compare import isomorphic
 from src.owl2Shacl import create_shacl, rdf_validate
@@ -13,8 +15,10 @@ SH_CLASS = URIRef("http://www.w3.org/ns/shacl#class")
 SH_OR = URIRef("http://www.w3.org/ns/shacl#or")
 
 
-class TestOwl2Shacl(unittest.TestCase):
+logging.basicConfig(stream=sys.stdout, level=logging.INFO, force=True)
 
+
+class TestOwl2Shacl(unittest.TestCase):
     # @unittest.skip("done")
     def test_valid_data(self):
         expected_result = Graph()
@@ -43,7 +47,7 @@ class TestOwl2Shacl(unittest.TestCase):
         expected_result.add((vres, SH.resultMessage, Literal("Value does not have class ies:Name")))
         expected_result.add((vres, SH.resultSeverity, SH.Warning))
         expected_result.add((vres, SH.sourceConstraintComponent, SH.ClassConstraintComponent))
-        expected_result.add((vres, SH.sourceShape, IES.hasNameRangeShape))
+        expected_result.add((vres, SH.sourceShape, IES.HasNameRangeShape))
         expected_result.add((vres, SH.value, Literal("Fred")))
 
         data_graph = Graph()
@@ -56,7 +60,7 @@ class TestOwl2Shacl(unittest.TestCase):
 
         ont_graph, sh_graph = create_shacl(ont_file)
         conforms, results_graph, results_text = rdf_validate(data_graph, ont_graph, sh_graph)
-        print(results_graph.serialize(format="turtle"))
+        logging.info(results_graph.serialize(format="turtle"))
         self.assertFalse(conforms)
         assert isomorphic(expected_result, results_graph)
 
@@ -73,7 +77,7 @@ class TestOwl2Shacl(unittest.TestCase):
         expected_result.add((vres, SH.resultMessage, Literal("Value does not have class ies:Person")))
         expected_result.add((vres, SH.resultSeverity, SH.Warning))
         expected_result.add((vres, SH.sourceConstraintComponent, SH.ClassConstraintComponent))
-        expected_result.add((vres, SH.sourceShape, IES.siblingOfRangeShape))
+        expected_result.add((vres, SH.sourceShape, IES.SiblingOfRangeShape))
         expected_result.add((vres, SH.value, DATA.John))
 
         data_graph = Graph()
@@ -90,7 +94,7 @@ class TestOwl2Shacl(unittest.TestCase):
         ont_graph, sh_graph = create_shacl(ont_file)
         conforms, results_graph, results_text = rdf_validate(data_graph, ont_graph, sh_graph)
         res = results_graph.serialize(format="turtle")
-        print(res)
+        logging.info(res)
         self.assertFalse(conforms)
         assert isomorphic(expected_result, results_graph)
 
@@ -107,7 +111,7 @@ class TestOwl2Shacl(unittest.TestCase):
         expected_result.add((vres, SH.resultMessage, Literal("Value does not have class ies:Name")))
         expected_result.add((vres, SH.resultSeverity, SH.Warning))
         expected_result.add((vres, SH.sourceConstraintComponent, SH.ClassConstraintComponent))
-        expected_result.add((vres, SH.sourceShape, IES.hasNameRangeShape))
+        expected_result.add((vres, SH.sourceShape, IES.HasNameRangeShape))
         expected_result.add((vres, SH.value, DATA.fredName))
 
         data_graph = Graph()
@@ -122,7 +126,7 @@ class TestOwl2Shacl(unittest.TestCase):
         ont_graph, sh_graph = create_shacl(ont_file)
         conforms, results_graph, results_text = rdf_validate(data_graph, ont_graph, sh_graph)
         res = results_graph.serialize(format="turtle")
-        print(res)
+        logging.info(res)
         self.assertFalse(conforms)
         assert isomorphic(expected_result, results_graph)
 
@@ -143,7 +147,7 @@ class TestOwl2Shacl(unittest.TestCase):
                                  "Value class is not in classes (ies:IdentityDocument, ies:PaymentArtefact, ies:TravelTicket)")))
         expected_result.add((vres, SH.resultSeverity, SH.Warning))
         expected_result.add((vres, SH.sourceConstraintComponent, SH.ClassConstraintComponent))
-        expected_result.add((vres, SH.sourceShape, IES.validFromDateDomainShape))
+        expected_result.add((vres, SH.sourceShape, IES.ValidFromDateDomainShape))
         expected_result.add((vres, SH.value, DATA.TravelTicket))
         expected_result.add((vres2, RDF.type, SH.ValidationResult))
         expected_result.add((vres2, SH.focusNode, DATA.TravelTicket))
@@ -152,7 +156,7 @@ class TestOwl2Shacl(unittest.TestCase):
                                  "Value class is not in classes (ies:IdentityDocument, ies:PaymentArtefact, ies:TravelTicket)")))
         expected_result.add((vres2, SH.resultSeverity, SH.Warning))
         expected_result.add((vres2, SH.sourceConstraintComponent, SH.ClassConstraintComponent))
-        expected_result.add((vres2, SH.sourceShape, IES.validFromDateDomainShape))
+        expected_result.add((vres2, SH.sourceShape, IES.ValidFromDateDomainShape))
         expected_result.add((vres2, SH.value, DATA.TravelTicket))
 
         data_graph = Graph()
@@ -167,7 +171,7 @@ class TestOwl2Shacl(unittest.TestCase):
 
         ont_graph, sh_graph = create_shacl(ont_file)
         conforms, results_graph, results_text = rdf_validate(data_graph, ont_graph, sh_graph)
-        print(results_graph.serialize(format="turtle"))
+        logging.info(results_graph.serialize(format="turtle"))
         self.assertFalse(conforms)
         assert isomorphic(expected_result, results_graph)
 
@@ -181,14 +185,14 @@ class TestOwl2Shacl(unittest.TestCase):
         bn4 = BNode()
         bn5 = BNode()
         bn6 = BNode()
-        expected_result.add((IES.validFromDateRangeShape, RDF.type, SH.NodeShape))
+        expected_result.add((IES.ValidFromDateRangeShape, RDF.type, SH.NodeShape))
         expected_result.add(
-            (IES.validFromDateRangeShape, SH_CLASS, IES.ParticularPeriod))
-        expected_result.add((IES.validFromDateRangeShape, SH.severity, SH.Warning))
-        expected_result.add((IES.validFromDateRangeShape, SH.targetObjectsOf, IES.validFromDate))
+            (IES.ValidFromDateRangeShape, SH_CLASS, IES.ParticularPeriod))
+        expected_result.add((IES.ValidFromDateRangeShape, SH.severity, SH.Warning))
+        expected_result.add((IES.ValidFromDateRangeShape, SH.targetObjectsOf, IES.validFromDate))
 
-        expected_result.add((IES.validFromDateDomainShape, RDF.type, SH.NodeShape))
-        expected_result.add((IES.validFromDateDomainShape, SH_OR, bn1))
+        expected_result.add((IES.ValidFromDateDomainShape, RDF.type, SH.NodeShape))
+        expected_result.add((IES.ValidFromDateDomainShape, SH_OR, bn1))
         expected_result.add((bn1, RDF.first, bn2))
         expected_result.add((bn1, RDF.rest, bn3))
         expected_result.add((bn3, RDF.first, bn4))
@@ -198,8 +202,8 @@ class TestOwl2Shacl(unittest.TestCase):
         expected_result.add((bn2, SH_CLASS, IES.IdentityDocument))
         expected_result.add((bn4, SH_CLASS, IES.PaymentArtefact))
         expected_result.add((bn6, SH_CLASS, IES.TravelTicket))
-        expected_result.add((IES.validFromDateDomainShape, SH.severity, SH.Warning))
-        expected_result.add((IES.validFromDateDomainShape, SH.targetSubjectsOf, IES.validFromDate))
+        expected_result.add((IES.ValidFromDateDomainShape, SH.severity, SH.Warning))
+        expected_result.add((IES.ValidFromDateDomainShape, SH.targetSubjectsOf, IES.validFromDate))
 
         ont_graph = Graph()
         ont_graph.bind('ies', IES)
@@ -226,9 +230,9 @@ class TestOwl2Shacl(unittest.TestCase):
         ont_graph.add((cls3, RDF.rest, RDF.nil))
 
         new_ont_graph, sh_graph = create_shacl(ont_graph)
-        print(ont_graph.serialize(format="turtle"))
-        print(expected_result.serialize(format="turtle"))
-        print(sh_graph.serialize(format="turtle"))
+        logging.info(ont_graph.serialize(format="turtle"))
+        logging.info(expected_result.serialize(format="turtle"))
+        logging.info(sh_graph.serialize(format="turtle"))
         assert isomorphic(expected_result, sh_graph)
 
     # @unittest.skip("done")
@@ -241,8 +245,8 @@ class TestOwl2Shacl(unittest.TestCase):
         bn4 = BNode()
         bn5 = BNode()
         bn6 = BNode()
-        expected_result.add((IES.testPropertyRangeShape, RDF.type, SH.NodeShape))
-        expected_result.add((IES.testPropertyRangeShape, SH_OR, bn1))
+        expected_result.add((IES.TestPropertyRangeShape, RDF.type, SH.NodeShape))
+        expected_result.add((IES.TestPropertyRangeShape, SH_OR, bn1))
         expected_result.add((bn1, RDF.first, bn2))
         expected_result.add((bn1, RDF.rest, bn3))
         expected_result.add((bn3, RDF.first, bn4))
@@ -252,14 +256,14 @@ class TestOwl2Shacl(unittest.TestCase):
         expected_result.add((bn2, SH.datatype, XSD.boolean))
         expected_result.add((bn4, SH.datatype, XSD.date))
         expected_result.add((bn6, SH.datatype, XSD.integer))
-        expected_result.add((IES.testPropertyRangeShape, SH.severity, SH.Warning))
-        expected_result.add((IES.testPropertyRangeShape, SH.targetObjectsOf, IES.testProperty))
+        expected_result.add((IES.TestPropertyRangeShape, SH.severity, SH.Warning))
+        expected_result.add((IES.TestPropertyRangeShape, SH.targetObjectsOf, IES.testProperty))
 
-        expected_result.add((IES.testPropertyDomainShape, RDF.type, SH.NodeShape))
+        expected_result.add((IES.TestPropertyDomainShape, RDF.type, SH.NodeShape))
         expected_result.add(
-            (IES.testPropertyDomainShape, SH_CLASS, IES.TestItem))
-        expected_result.add((IES.testPropertyDomainShape, SH.severity, SH.Warning))
-        expected_result.add((IES.testPropertyDomainShape, SH.targetSubjectsOf, IES.testProperty))
+            (IES.TestPropertyDomainShape, SH_CLASS, IES.TestItem))
+        expected_result.add((IES.TestPropertyDomainShape, SH.severity, SH.Warning))
+        expected_result.add((IES.TestPropertyDomainShape, SH.targetSubjectsOf, IES.testProperty))
 
         ont_graph = Graph()
         ont_graph.bind('ies', IES)
@@ -286,9 +290,9 @@ class TestOwl2Shacl(unittest.TestCase):
         ont_graph.add((dt3, RDF.rest, RDF.nil))
 
         new_ont_graph, sh_graph = create_shacl(ont_graph)
-        print(ont_graph.serialize(format="turtle"))
-        print(expected_result.serialize(format="turtle"))
-        print(sh_graph.serialize(format="turtle"))
+        logging.info(ont_graph.serialize(format="turtle"))
+        logging.info(expected_result.serialize(format="turtle"))
+        logging.info(sh_graph.serialize(format="turtle"))
         assert isomorphic(expected_result, sh_graph)
 
     # @unittest.skip("done")
@@ -296,8 +300,8 @@ class TestOwl2Shacl(unittest.TestCase):
         expected_result = Graph().parse('test/expected_results/test_class_shapes.ttl')
         ont_file = Path("test/TestOntology.ttl")
         new_ont_graph, sh_graph = create_shacl(ont_file)
-        print(expected_result.serialize(format="turtle"))
-        print(sh_graph.serialize(format="turtle"))
+        logging.info(expected_result.serialize(format="turtle"))
+        logging.info(sh_graph.serialize(format="turtle"))
         assert isomorphic(expected_result, sh_graph)
 
 
