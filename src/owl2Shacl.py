@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Tuple
 from pyshacl import validate
 from rdflib import Graph, RDF, RDFS, SH, OWL, XSD
+from rdflib.compare import isomorphic, graph_diff
 from rdflib.term import URIRef, BNode, Literal, Node
 from itertools import chain
 
@@ -208,21 +209,36 @@ def _parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-o", "--ontology", help="Path to ontology - required", required=True)
     parser.add_argument("-v", "--validate", help="Path of file to validate", default=None)
-    parser.add_argument("-s", "--shacl", help="Location for resulting shapes graph", default=None)
+    parser.add_argument("-s", "--shacl", help="Location for resulting shapes graph", required=True)
+    parser.add_argument("-d", "--dryrun", help="Location for resulting shapes graph", action='store_true')
 
     return parser.parse_args()
 
 
 def main(argv):
     args = _parse_args()
-    if args.ontology:
+    if args.validate:
+        conforms, results_graph, results_text = rdf_validate(args.validate, args.ontology, args.shacl)
+        print(results_text)
+    else:
         ont_graph, sh_graph = create_shacl(args.ontology)
-        if args.shacl:
-            if args.validate:
-                conforms, results_graph, results_text = rdf_validate(args.validate, ont_graph, sh_graph)
-                print(results_text)
-            else:
-                sh_graph.serialize(forat="turtle", destination=args.shacl)
+        if args.dryrun:
+            try:
+                existing_shacl = Graph().parse(args.shacl)
+                assert isomorphic(existing_shacl, sh_graph)
+                print("There are no changes in the shacl shape graph")
+            except AssertionError:
+                diff = graph_diff(existing_shacl, sh_graph)
+                in_existing = diff[1]
+                in_new = diff[2]
+                deleted_content = (in_existing - in_new)
+                added_content = (in_new - in_existing)
+                print(f"Triples that would be deleted by this run: {len(deleted_content)}")
+                print(deleted_content.serialize(format="turtle"))
+                print(f"Triple that would be create by this run: {len(added_content)}")
+                print(added_content.serialize(format="turtle"))
+        else:
+            sh_graph.serialize(forat="turtle", destination=args.shacl)
 
 
 if __name__ == "__main__":
