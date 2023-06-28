@@ -29,7 +29,7 @@ class TestOwl2Shacl(unittest.TestCase):
         ont_file = Path("IES Specification Docs/IES4.ttl")
         ont_graph, sh_graph = create_shacl(ont_file)
         conforms, results_graph, results_text = rdf_validate(
-            "../Sample Data/hospital.ttl", ont_graph, sh_graph)
+            "Sample Data/hospital.ttl", ont_graph, sh_graph)
         self.assertTrue(conforms)
         self.assertEquals("Validation Report\nConforms: True\n", results_text)
         assert isomorphic(expected_result, results_graph)
