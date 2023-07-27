@@ -215,7 +215,7 @@ def _parse_args():
     return parser.parse_args()
 
 
-def main(argv):
+def main():
     args = _parse_args()
     if args.validate:
         conforms, results_graph, results_text = rdf_validate(args.validate, args.ontology, args.shacl)
@@ -241,6 +241,6 @@ def main(argv):
             sh_graph.serialize(forat="turtle", destination=args.shacl)
 
 
-if __name__ == "__main__":
-    main(sys.argv[1:])
+if __name__ == '__main__':
+    main()
 
