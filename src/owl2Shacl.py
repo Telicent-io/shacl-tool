@@ -1,5 +1,4 @@
 import argparse
-import sys
 from pathlib import Path
 from typing import Tuple
 from pyshacl import validate
