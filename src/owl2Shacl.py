@@ -68,26 +68,27 @@ def _create_node_shapes_for_properties(ont_graph, sh_graph, property_type):
         _add_shape_triples_to_graph(ont_graph, sh_graph, property_type, property_shape, targets, prop)
 
 
-def bind_restriction_values( ont_graph, restriction: Node):
+def bind_restriction_values(ont_graph, restriction: Node):
     return {
-                "path": ont_graph.value(subject=restriction, predicate=OWL.onProperty),
-                "class": ont_graph.value(subject=restriction, predicate=OWL.onClass),
-                "some": ont_graph.value(subject=restriction, predicate=OWL.someValuesFrom),
-                "all_values": ont_graph.value(subject=restriction, predicate=OWL.allValuesFrom),
-                "value": ont_graph.value(subject=restriction, predicate=OWL.hasValue),
-                "minqc": ont_graph.value(subject=restriction, predicate=OWL.minQualifiedCardinality),
-                "minc": ont_graph.value(subject=restriction, predicate=OWL.minCardinality),
-                "maxqc": ont_graph.value(subject=restriction, predicate=OWL.maxQualifiedCardinality),
-                "maxc": ont_graph.value(subject=restriction, predicate=OWL.maxCardinality),
-                "qexact": ont_graph.value(subject=restriction, predicate=OWL.qualifiedCardinality),
-                "exact": ont_graph.value(subject=restriction, predicate=OWL.cardinality),
-                "union": ont_graph.value(subject=restriction, predicate=OWL.unionOf),
-                "intersection": ont_graph.value(subject=restriction, predicate=OWL.intersectionOf),
-                "first": ont_graph.value(subject=restriction, predicate=RDF.first),
-                "rest": ont_graph.value(subject=restriction, predicate=RDF.rest)
+        "path": ont_graph.value(subject=restriction, predicate=OWL.onProperty),
+        "class": ont_graph.value(subject=restriction, predicate=OWL.onClass),
+        "some": ont_graph.value(subject=restriction, predicate=OWL.someValuesFrom),
+        "all_values": ont_graph.value(subject=restriction, predicate=OWL.allValuesFrom),
+        "value": ont_graph.value(subject=restriction, predicate=OWL.hasValue),
+        "minqc": ont_graph.value(subject=restriction, predicate=OWL.minQualifiedCardinality),
+        "minc": ont_graph.value(subject=restriction, predicate=OWL.minCardinality),
+        "maxqc": ont_graph.value(subject=restriction, predicate=OWL.maxQualifiedCardinality),
+        "maxc": ont_graph.value(subject=restriction, predicate=OWL.maxCardinality),
+        "qexact": ont_graph.value(subject=restriction, predicate=OWL.qualifiedCardinality),
+        "exact": ont_graph.value(subject=restriction, predicate=OWL.cardinality),
+        "union": ont_graph.value(subject=restriction, predicate=OWL.unionOf),
+        "intersection": ont_graph.value(subject=restriction, predicate=OWL.intersectionOf),
+        "first": ont_graph.value(subject=restriction, predicate=RDF.first),
+        "rest": ont_graph.value(subject=restriction, predicate=RDF.rest)
     }
 
-def add_restriction(ont_graph, sh_graph, item,  restriction):
+
+def add_restriction(ont_graph, sh_graph, item, restriction):
     property_shape = BNode()
     if restriction["all_values"]:
         if type(item) is not BNode:
@@ -136,13 +137,21 @@ def add_restriction(ont_graph, sh_graph, item,  restriction):
         else:
             sh_graph.add((item, SH.property, property_shape))
 
-        if restriction["path"]: sh_graph.add((property_shape, SH.path, restriction["path"]))
-        if restriction["class"]: sh_graph.add((property_shape, SH_CLASS, restriction["class"]))
-        if restriction["value"]: sh_graph.add((property_shape, SH.hasValue, restriction["value"]))
-        if restriction["minc"]: sh_graph.add((property_shape, SH.minCount, restriction["minc"]))
-        if restriction["minqc"]: sh_graph.add((property_shape, SH.minCount, restriction["minqc"]))
-        if restriction["maxc"]: sh_graph.add((property_shape, SH.maxCount, restriction["maxc"]))
-        if restriction["maxqc"]: sh_graph.add((property_shape, SH.maxCount, restriction["maxqc"]))
+        if restriction["path"]:
+            sh_graph.add((property_shape, SH.path, restriction["path"]))
+
+        if restriction["class"]:
+            sh_graph.add((property_shape, SH_CLASS, restriction["class"]))
+        if restriction["value"]:
+            sh_graph.add((property_shape, SH.hasValue, restriction["value"]))
+        if restriction["minc"]:
+            sh_graph.add((property_shape, SH.minCount, restriction["minc"]))
+        if restriction["minqc"]:
+            sh_graph.add((property_shape, SH.minCount, restriction["minqc"]))
+        if restriction["maxc"]:
+            sh_graph.add((property_shape, SH.maxCount, restriction["maxc"]))
+        if restriction["maxqc"]:
+            sh_graph.add((property_shape, SH.maxCount, restriction["maxqc"]))
         if restriction["exact"]:
             sh_graph.add((property_shape, SH.minCount, restriction["exact"]))
             sh_graph.add((property_shape, SH.maxCount, restriction["exact"]))
@@ -187,7 +196,7 @@ def create_shacl(ontology: str | Path | Graph) -> Tuple[Graph, Graph]:
 
 
 def rdf_validate(data_file: str | Graph, ont_graph: str | Graph, sh_graph: str | Graph) -> Tuple[
-        bool, Graph, str]:
+    bool, Graph, str]:
     # run shacl validation
     conforms, results_graph, results_text = validate(data_file,
                                                      shacl_graph=sh_graph,
@@ -242,4 +251,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
+    
