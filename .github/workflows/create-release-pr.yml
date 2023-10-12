@@ -17,7 +17,7 @@ jobs:
           release-type: python
           package-name: release-please-action
           prerelease: false
-          default-branch: 1.x
+          default-branch: test-gn
           extra-files: |
             "pyproject.toml"
           version-file: pyproject.toml
