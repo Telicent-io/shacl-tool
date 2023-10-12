@@ -28,7 +28,7 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install pip-tools 
-          python -m pip-tools compile --extra dev -o requirements.txt pyproject.toml
+          python -m piptools compile --extra dev -o requirements.txt pyproject.toml
           pip install -r requirements.txt
       - name: flake8 Python Style Checking
         run: |
