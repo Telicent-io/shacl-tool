@@ -20,7 +20,7 @@ style = [
 ]
 
 [project]
-dynamic = ["dependencies", "readme"]
+dynamic = ["readme"]
 name = "owl2shacl"
 version = "0.0.1"
 authors = [{name = "Telicent Ltd", email = "admin@telicent.io"}]
@@ -51,14 +51,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "flake8"]
+dev = ["pytest", "flake8", "pre-commit"]
 
 [tool.setuptools.dynamic]
 readme = { file = ["src/README.adoc", "introduction.md", "4dOntologyIntro.md", "ies.md"] }
 
 [tool.flake8]
 max-line-length = 120
-
+[ewq]
 [project.urls]
 Repository = "https://github.com/Telicent-io/shacl-tool"
 
