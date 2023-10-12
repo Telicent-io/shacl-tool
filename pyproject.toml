@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61", "wheel", "pip-tools"]
+requires = ["setuptools>=61", "wheel", "pip-tools", "twine"]
 build-backend = "setuptools.build_meta"
 
 [tool]

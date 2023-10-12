@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
@@ -69,7 +69,7 @@ jobs:
         id: generate-code-artifact-token
         run: |
           echo "::set-output name=CODEARTIFACT_AUTH_TOKEN::`aws codeartifact get-authorization-token --domain telicent --domain-owner 098669589541 --query authorizationToken --duration-seconds 900 --output text`"
-      - if: ${{ matrix.python-version == '3.8' }}
+      - if: ${{ matrix.python-version == '3.11' }}
         name: Upload library to codeartifact
         id: pip-url
         run: |
@@ -79,5 +79,5 @@ jobs:
       pip_auth_token: ${{ steps.generate-code-artifact-token.outputs.CODEARTIFACT_AUTH_TOKEN }}
     needs: get_version
     env:
-      APP_NAME: maplib
+      APP_NAME: owl2shacl
       NODE_AUTH_TOKEN: ${{ secrets.PACKAGE_PAT }}
