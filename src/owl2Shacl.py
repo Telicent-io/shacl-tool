@@ -142,19 +142,26 @@ def add_restriction(ont_graph, sh_graph, item, restriction):
 
         if restriction["class"]:
             sh_graph.add((property_shape, SH_CLASS, restriction["class"]))
+
         if restriction["value"]:
             sh_graph.add((property_shape, SH.hasValue, restriction["value"]))
+
         if restriction["minc"]:
             sh_graph.add((property_shape, SH.minCount, restriction["minc"]))
+
         if restriction["minqc"]:
             sh_graph.add((property_shape, SH.minCount, restriction["minqc"]))
+
         if restriction["maxc"]:
             sh_graph.add((property_shape, SH.maxCount, restriction["maxc"]))
+
         if restriction["maxqc"]:
             sh_graph.add((property_shape, SH.maxCount, restriction["maxqc"]))
+
         if restriction["exact"]:
             sh_graph.add((property_shape, SH.minCount, restriction["exact"]))
             sh_graph.add((property_shape, SH.maxCount, restriction["exact"]))
+
         if restriction["qexact"]:
             sh_graph.add((property_shape, SH.minCount, restriction["qexact"]))
             sh_graph.add((property_shape, SH.maxCount, restriction["qexact"]))
