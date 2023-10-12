@@ -27,9 +27,9 @@ jobs:
           python-version: ${{ matrix.python-version }} 
       - name: Install Dependencies
         run: |
-          pipx install pip-tools
-          python -m piptools compile --extra dev -o requirements.txt pyproject.toml
-          pipx install -r requirements.txt
+          python -m pip install pip-tools 
+          python -m pip-tools compile --extra dev -o requirements.txt pyproject.toml
+          pip install -r requirements.txt
       - name: flake8 Python Style Checking
         run: |
           flake8 src
