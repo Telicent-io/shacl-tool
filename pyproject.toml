@@ -58,7 +58,7 @@ readme = { file = ["src/README.adoc", "introduction.md", "4dOntologyIntro.md", "
 
 [tool.flake8]
 max-line-length = 120
-[ewq2311]
+
 [project.urls]
 Repository = "https://github.com/Telicent-io/shacl-tool"
 
