@@ -2,11 +2,10 @@ name: Python Release Build
 
 on:
   push:
-    #branches-ignore:
-    #  - main
-    #  - feature/owl2shacl
     branches:
-      - enhancement/owl2shacl
+      - feature/owl2shacl
+    paths:
+      - CHANGELOG.md
   workflow_dispatch:
 jobs:
   get_version:

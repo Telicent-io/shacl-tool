@@ -6,7 +6,9 @@ on:
       - "release-please*"
   push:
     branches-ignore:
-      - "main"
+      #todo remove feature branch when migrated
+      - feature/owl2shacl
+      - main
   workflow_dispatch:
 jobs:
   test:

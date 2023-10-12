@@ -2,25 +2,6 @@
 requires = ["setuptools>=61", "wheel", "pip-tools", "twine"]
 build-backend = "setuptools.build_meta"
 
-[tool]
-[tool.commitizen]
-name = "cz_conventional_commits"
-version = "0.0.1"
-version_files = ["pyproject.toml:version"]
-tag_format = "v$version"
-
-style = [
-    ["qmark", "fg:#ff9d00 bold"],
-    ["question", "bold"],
-    ["answer", "fg:#ff9d00 bold"],
-    ["pointer", "fg:#ff9d00 bold"],
-    ["highlighted", "fg:#ff9d00 bold"],
-    ["selected", "fg:#cc5454"],
-    ["separator", "fg:#cc5454"],
-    ["instruction", ""],
-    ["text", ""],
-    ["disabled", "fg:#858585 italic"]
-]
 
 [project]
 dynamic = ["readme"]
@@ -67,6 +48,25 @@ Repository = "https://github.com/Telicent-io/shacl-tool"
 
 [project.scripts]
 owl2shacl = "src.owl2Shacl:main"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.0.1"
+version_files = ["pyproject.toml:version"]
+tag_format = "v$version"
+
+style = [
+    ["qmark", "fg:#ff9d00 bold"],
+    ["question", "bold"],
+    ["answer", "fg:#ff9d00 bold"],
+    ["pointer", "fg:#ff9d00 bold"],
+    ["highlighted", "fg:#ff9d00 bold"],
+    ["selected", "fg:#cc5454"],
+    ["separator", "fg:#cc5454"],
+    ["instruction", ""],
+    ["text", ""],
+    ["disabled", "fg:#858585 italic"]
+]
 
 [tool.distutils.bdist_wheel]
 universal = true
