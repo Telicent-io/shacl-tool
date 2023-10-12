@@ -15,9 +15,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: get-library-version
         id: get-library-version
-        run: echo "CURRENT_VERSION=`grep --binary-files=text -i 'version' pyproject.toml | grep -oP '(?<==\ ).*'`" >> $GITHUB_OUTPUT
+        run: echo "CURRENT_VERSION=$(grep --binary-files=text -i 'version' pyproject.toml | grep -oP '(?<==\ ).*')" >> $GITHUB_OUTPUT
     outputs:
-      version: ${{ steps.get-library-version.outputs.CURRENT_VERSION }}
+      version: ${CURRENT_VERSION}
   release-build:
     runs-on: ubuntu-latest
     permissions:
@@ -68,8 +68,7 @@ jobs:
       - name: generate-code-artifact-token
         id: generate-code-artifact-token
         run: |
-          echo "CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain telicent --domain-owner 
-          098669589541 --query authorizationToken --duration-seconds 900 --output text`" >> $GITHUB_OUTPUT
+          echo "CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain telicent --domain-owner 098669589541 --query authorizationToken --duration-seconds 900 --output text`" >> $GITHUB_OUTPUT
       - if: ${{ matrix.python-version == '3.11' }}
         name: Upload library to codeartifact
         id: pip-url
@@ -77,7 +76,7 @@ jobs:
           pip install twine
           twine upload --repository codeartifact ./dist/*
     outputs:
-      pip_auth_token: ${{ steps.generate-code-artifact-token.outputs.CODEARTIFACT_AUTH_TOKEN }}
+      pip_auth_token: ${CODEARTIFACT_AUTH_TOKEN}
     needs: get_version
     env:
       APP_NAME: owl2shacl
