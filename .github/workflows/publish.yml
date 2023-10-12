@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: get-library-version
         id: get-library-version
-        run: echo "::set-output name=CURRENT_VERSION::`grep --binary-files=text -i 'version' pyproject.toml | grep -oP '(?<==\ ).*'`"
+        run: echo "CURRENT_VERSION=`grep --binary-files=text -i 'version' pyproject.toml | grep -oP '(?<==\ ).*'`" >> $GITHUB_OUTPUT
     outputs:
       version: ${{ steps.get-library-version.outputs.CURRENT_VERSION }}
   release-build:
@@ -68,7 +68,8 @@ jobs:
       - name: generate-code-artifact-token
         id: generate-code-artifact-token
         run: |
-          echo "::set-output name=CODEARTIFACT_AUTH_TOKEN::`aws codeartifact get-authorization-token --domain telicent --domain-owner 098669589541 --query authorizationToken --duration-seconds 900 --output text`"
+          echo "CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain telicent --domain-owner 
+          098669589541 --query authorizationToken --duration-seconds 900 --output text`" >> $GITHUB_OUTPUT
       - if: ${{ matrix.python-version == '3.11' }}
         name: Upload library to codeartifact
         id: pip-url
