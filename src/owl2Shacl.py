@@ -195,8 +195,7 @@ def create_shacl(ontology: str | Path | Graph) -> Tuple[Graph, Graph]:
     return ont_graph, sh_graph
 
 
-def rdf_validate(data_file: str | Graph, ont_graph: str | Graph, sh_graph: str | Graph) -> Tuple[
-    bool, Graph, str]:
+def rdf_validate(data_file: str | Graph, ont_graph: str | Graph, sh_graph: str | Graph) -> Tuple[bool, Graph, str]:
     # run shacl validation
     conforms, results_graph, results_text = validate(data_file,
                                                      shacl_graph=sh_graph,
@@ -251,4 +250,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
