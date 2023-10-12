@@ -142,7 +142,7 @@ class TestOwl2Shacl(unittest.TestCase):
         expected_result.add((vres, RDF.type, SH.ValidationResult))
         expected_result.add((vres, SH.focusNode, DATA.TravelTicket))
         msg = "Value class is not in classes (ies:IdentityDocument, ies:PaymentArtefact, ies:TravelTicket)"
-        expected_result.add((vres, SH.resultMessage, Literal(literal)))
+        expected_result.add((vres, SH.resultMessage, Literal(msg)))
         expected_result.add((vres, SH.resultSeverity, SH.Warning))
         expected_result.add((vres, SH.sourceConstraintComponent, SH.ClassConstraintComponent))
         expected_result.add((vres, SH.sourceShape, IES.ValidFromDateDomainShape))
