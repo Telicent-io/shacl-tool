@@ -42,7 +42,7 @@ jobs:
           path: "test" 
       - name: Unit Tests
         run: |
-          python3 -m unittest discover -s tests --verbose
+          python3 -m unittest discover -s test --verbose
       - name: Build
         run: |
           python3 -m build
