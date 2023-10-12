@@ -1,10 +1,10 @@
-name: Python Test Build
+name: Python Release Build
 
 on:
   push:
-    branches-ignore:
-      - main
-      - feature/owl2shacl
+    #branches-ignore:
+    #  - main
+    #  - feature/owl2shacl
     branches:
       - enhancement/owl2shacl
   workflow_dispatch:
@@ -39,12 +39,12 @@ jobs:
           python -m pip install pip-tools 
           python -m piptools compile --extra dev -o requirements.txt pyproject.toml
           pip install -r requirements.txt
-      - name: flake8 Lint Source
+      - name: FLAKE8 lint source files
         uses: py-actions/flake8@v2
         with:
           max-line-length: "120"
           path: "src"
-      - name: flake8 Lint Tests
+      - name: FLAKE8 lint test files
         uses: py-actions/flake8@v2
         with:
           max-line-length: "120"
@@ -52,7 +52,7 @@ jobs:
       - name: Unit Tests
         run: |
           python3 -m unittest discover -s test --verbose
-      - name: Build
+      - name: Release build
         run: |
           python3 -m build
       - name: Configure AWS credentials from main account

@@ -30,12 +30,12 @@ jobs:
           python -m pip install pip-tools 
           python -m piptools compile --extra dev -o requirements.txt pyproject.toml
           pip install -r requirements.txt
-      - name: flake8 Lint Source
+      - name: flake8 lint source code
         uses: py-actions/flake8@v2
         with:
           max-line-length: "120"
           path: "src"
-      - name: flake8 Lint Tests
+      - name: flake8 lint test code
         uses: py-actions/flake8@v2
         with:
           max-line-length: "120"
@@ -43,7 +43,7 @@ jobs:
       - name: Unit Tests
         run: |
           python3 -m unittest discover -s test --verbose
-      - name: Build
+      - name: Build Test
         run: |
           python3 -m build
       
