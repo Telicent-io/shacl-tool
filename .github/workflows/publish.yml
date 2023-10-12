@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: get-library-version
         id: get-library-version
-        run: echo "CURRENT_VERSION=`grep --binary-files=text -i 'version' pyproject.toml | grep -oP '(?<==\ ).*'`" >> "$GITHUB_OUTPUT"
+        run: echo "CURRENT_VERSION=`awk -F'= ' '/\[project\]/ {flag=1; next} /version/ && flag {gsub(/"/, "", $2); print $2; flag=0}' pyproject.toml`" >> "$GITHUB_OUTPUT"
     outputs:
       version: ${{ steps.get-library-version.outputs.CURRENT_VERSION }}
   release-build:
