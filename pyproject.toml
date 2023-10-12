@@ -54,7 +54,6 @@ dependencies = [
 dev = ["pytest", "flake8"]
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
 readme = { file = ["src/README.adoc", "introduction.md", "4dOntologyIntro.md", "ies.md"] }
 
 [tool.flake8]

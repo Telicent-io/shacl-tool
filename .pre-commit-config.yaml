@@ -6,3 +6,7 @@ repos:
       - id: commitizen
       - id: commitizen-branch
         stages: [prepare-commit-msg]
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.14
+    hooks:
+      - id: validate-pyproject
