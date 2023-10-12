@@ -72,7 +72,8 @@ owl2shacl = "src.owl2Shacl:main"
 universal = true
 
 [tool.setuptools]
-include-package-data = true
+include-package-data = false
 
-[tool.setuptools.packages]
-find = {}
+[tool.setuptools.packages.find]
+include = ["src*"]
+exclude = ["docs*", "test*"]

@@ -12,7 +12,7 @@ jobs:
   get_version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: get-library-version
         id: get-library-version
         run: echo "::set-output name=CURRENT_VERSION::`grep --binary-files=text -i 'version' pyproject.toml | grep -oP '(?<==\ ).*'`"
