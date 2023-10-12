@@ -55,7 +55,7 @@ jobs:
       - name: Build
         run: |
           python3 -m build
-            - name: Configure AWS credentials from main account
+      - name: Configure AWS credentials from main account
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::098669589541:role/AWSDeployCodeArtifact
