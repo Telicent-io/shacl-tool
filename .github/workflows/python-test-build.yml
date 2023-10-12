@@ -1,0 +1,42 @@
+name: Python Test Build
+
+on:
+  pull_request:
+    branches:
+      - "test*"
+  push:
+    branches-ignore:
+      - "main"
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+          pip install -r requirements.txt
+      - name: flake8 Python Style Checking
+        run: |
+          flake8 src
+          flake8 tests
+      - name: Unit Tests
+        run: |
+          python3 -m unittest discover -s tests --verbose
+      - name: Build
+        run: |
+          python3 -m build
