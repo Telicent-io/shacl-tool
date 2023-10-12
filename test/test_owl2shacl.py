@@ -14,7 +14,6 @@ SPARX = Namespace("http://data.sparxsystems.com#")
 SH_CLASS = URIRef("http://www.w3.org/ns/shacl#class")
 SH_OR = URIRef("http://www.w3.org/ns/shacl#or")
 
-
 logging.basicConfig(stream=sys.stdout, level=logging.INFO, force=True)
 
 
@@ -142,18 +141,16 @@ class TestOwl2Shacl(unittest.TestCase):
         expected_result.add((vrep, SH.result, vres2))
         expected_result.add((vres, RDF.type, SH.ValidationResult))
         expected_result.add((vres, SH.focusNode, DATA.TravelTicket))
-        expected_result.add((vres, SH.resultMessage,
-                             Literal(
-                                 "Value class is not in classes (ies:IdentityDocument, ies:PaymentArtefact, ies:TravelTicket)")))
+        msg = "Value class is not in classes (ies:IdentityDocument, ies:PaymentArtefact, ies:TravelTicket)"
+        expected_result.add((vres, SH.resultMessage, Literal(literal)))
         expected_result.add((vres, SH.resultSeverity, SH.Warning))
         expected_result.add((vres, SH.sourceConstraintComponent, SH.ClassConstraintComponent))
         expected_result.add((vres, SH.sourceShape, IES.ValidFromDateDomainShape))
         expected_result.add((vres, SH.value, DATA.TravelTicket))
         expected_result.add((vres2, RDF.type, SH.ValidationResult))
         expected_result.add((vres2, SH.focusNode, DATA.TravelTicket))
-        expected_result.add((vres2, SH.resultMessage,
-                             Literal(
-                                 "Value class is not in classes (ies:IdentityDocument, ies:PaymentArtefact, ies:TravelTicket)")))
+        msg1 = "Value class is not in classes (ies:IdentityDocument, ies:PaymentArtefact, ies:TravelTicket)"
+        expected_result.add((vres2, SH.resultMessage,Literal(msg1)))
         expected_result.add((vres2, SH.resultSeverity, SH.Warning))
         expected_result.add((vres2, SH.sourceConstraintComponent, SH.ClassConstraintComponent))
         expected_result.add((vres2, SH.sourceShape, IES.ValidFromDateDomainShape))
