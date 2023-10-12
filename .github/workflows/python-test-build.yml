@@ -3,7 +3,7 @@ name: Python Test Build
 on:
   pull_request:
     branches:
-      - "test*"
+      - "release-please*"
   push:
     branches-ignore:
       - "main"

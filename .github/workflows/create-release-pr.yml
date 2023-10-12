@@ -3,7 +3,7 @@ name: Create python project release PR
 on:
   push:
     branches:
-      - "test-qgn"
+      - "test-gn"
 permissions:
   contents: write
   pull-requests: write
