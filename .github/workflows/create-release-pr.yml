@@ -17,7 +17,14 @@ jobs:
           release-type: python
           package-name: release-please-action
           prerelease: false
+          default-branch: 1.x
           extra-files: |
             "pyproject.toml"
           version-file: pyproject.toml
+          changelog-types: '[
+          {"type":"feat","section":"Features","hidden":false},
+          {"type":"fix","section":"Bug Fixes","hidden":false},
+          {"type":"chore","section":"Miscellaneous","hidden":false}
+          {"type":"perf","section":"Performance improvements","hidden":false}]'
+
 
