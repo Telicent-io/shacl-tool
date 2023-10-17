@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/Telicent-io/shacl-tool/compare/v0.1.0...v0.2.0) (2023-10-17)
+
+
+### Features
+
+* Refactor the project make module name more friendly. Allow to be importable ([8ac25fd](https://github.com/Telicent-io/shacl-tool/commit/8ac25fd6c7a0afc071c417d1f5af559f5414be6e))
+
 ## 0.1.0 (2023-10-17)
 
 
