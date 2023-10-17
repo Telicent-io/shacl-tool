@@ -27,4 +27,5 @@ jobs:
           {"type":"feat","section":"Features","hidden":false},
           {"type":"fix","section":"Bug Fixes","hidden":false},
           {"type":"chore","section":"Miscellaneous","hidden":false},
-          {"type":"perf","section":"Performance improvements","hidden":false}]'
+          {"type":"perf","section":"Performance improvements","hidden":false}
+          ]'
