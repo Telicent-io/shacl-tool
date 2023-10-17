@@ -38,7 +38,7 @@ dependencies = [
 dev = ["pytest", "flake8", "pre-commit"]
 
 [tool.setuptools.dynamic]
-readme = { file = ["src/README.adoc", "introduction.md", "4dOntologyIntro.md", "ies.md"] }
+readme = { file = ["shacltool/README.adoc", "introduction.md", "4dOntologyIntro.md", "ies.md"] }
 
 [tool.flake8]
 max-line-length = 120
@@ -74,6 +74,7 @@ universal = true
 [tool.setuptools]
 include-package-data = false
 
+
 [tool.setuptools.packages.find]
-include = ["src*"]
+include = ["shacltool*"]
 exclude = ["docs*", "test*"]

@@ -36,7 +36,7 @@ jobs:
         uses: py-actions/flake8@v2
         with:
           max-line-length: "120"
-          path: "src"
+          path: "shacltool"
       - name: flake8 lint test code
         uses: py-actions/flake8@v2
         with:
