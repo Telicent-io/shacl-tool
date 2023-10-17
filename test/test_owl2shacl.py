@@ -3,7 +3,7 @@ import unittest
 import logging
 from pathlib import Path
 from rdflib.compare import isomorphic
-from src.owl2Shacl import create_shacl, rdf_validate
+from shacltool.owl2shacl import create_shacl, rdf_validate
 from rdflib import Graph, SH, BNode, RDF, XSD, Literal, Namespace, OWL, RDFS
 from rdflib.term import URIRef
 
