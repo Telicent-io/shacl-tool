@@ -47,7 +47,7 @@ max-line-length = 120
 Repository = "https://github.com/Telicent-io/shacl-tool"
 
 [project.scripts]
-owl2shacl = "src.owl2Shacl:main"
+owl2shacl = "shacltool.owl2Shacl:main"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
