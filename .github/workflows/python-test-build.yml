@@ -1,0 +1,51 @@
+name: Python Test Build
+
+on:
+  pull_request:
+    branches:
+      - "release-please*"
+  push:
+    branches-ignore:
+      #todo remove feature branch when migrated
+      - feature/owl2shacl
+      - main
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }} 
+      - name: Install Dependencies
+        run: |
+          python -m pip install pip-tools 
+          python -m piptools compile --extra dev -o requirements.txt pyproject.toml
+          pip install -r requirements.txt
+      - name: flake8 lint source code
+        uses: py-actions/flake8@v2
+        with:
+          max-line-length: "120"
+          path: "src"
+      - name: flake8 lint test code
+        uses: py-actions/flake8@v2
+        with:
+          max-line-length: "120"
+          path: "test" 
+      - name: Unit Tests
+        run: |
+          python3 -m unittest discover -s test --verbose
+      - name: Build Test
+        run: |
+          python3 -m build
+      

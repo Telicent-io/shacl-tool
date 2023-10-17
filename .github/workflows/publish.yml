@@ -1,0 +1,82 @@
+name: Python Release Build
+
+on:
+  push:
+    branches:
+      - feature/owl2shacl
+    paths:
+      - CHANGELOG.md
+  workflow_dispatch:
+jobs:
+  get_version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: get-library-version
+        id: get-library-version
+        run: echo "CURRENT_VERSION=`awk -F'= ' '/\[project\]/ {flag=1; next} /version/ && flag {gsub(/"/, "", $2); print $2; flag=0}' pyproject.toml`" >> "$GITHUB_OUTPUT"
+    outputs:
+      version: ${{ steps.get-library-version.outputs.CURRENT_VERSION }}
+  release-build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: |
+          python -m pip install pip-tools 
+          python -m piptools compile --extra dev -o requirements.txt pyproject.toml
+          pip install -r requirements.txt
+      - name: FLAKE8 lint source files
+        uses: py-actions/flake8@v2
+        with:
+          max-line-length: "120"
+          path: "src"
+      - name: FLAKE8 lint test files
+        uses: py-actions/flake8@v2
+        with:
+          max-line-length: "120"
+          path: "test"
+      - name: Unit Tests
+        run: |
+          python3 -m unittest discover -s test --verbose
+      - name: Release build
+        run: |
+          python3 -m build
+      - name: Configure AWS credentials from main account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::098669589541:role/AWSDeployCodeArtifact
+          aws-region: eu-west-2
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Login to CodeArtifact
+        run: aws codeartifact login --tool twine --repository telicent-code-artifacts --domain telicent --domain-owner 098669589541 --duration-seconds 900
+      - name: generate-code-artifact-token
+        id: generate-code-artifact-token
+        run: |
+          echo "CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain telicent --domain-owner 098669589541 --query authorizationToken --duration-seconds 900 --output text`" >> "$GITHUB_OUTPUT"
+      - if: ${{ matrix.python-version == '3.11' }}
+        name: Upload library to codeartifact
+        id: pip-url
+        run: |
+          pip install twine
+          twine upload --repository codeartifact ./dist/*
+    outputs:
+      pip_auth_token: ${{ steps.generate-code-artifact-token.outputs.CODEARTIFACT_AUTH_TOKEN }}
+    needs: get_version
+    env:
+      APP_NAME: owl2shacl
+      NODE_AUTH_TOKEN: ${{ secrets.PACKAGE_PAT }}

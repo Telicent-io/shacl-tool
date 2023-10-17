@@ -1,0 +1,30 @@
+name: Create python project release PR
+
+on:
+  push:
+    branches:
+      #todo change to main
+      - "feature/owl2shacl"
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-release-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        with:
+          release-type: python
+          package-name: release-please-action
+          prerelease: false
+          # todo move away from this branch and use main
+          default-branch: feature/owl2shacl
+          extra-files: |
+            "pyproject.toml"
+          version-file: pyproject.toml
+          changelog-types: '[
+          {"type":"feat","section":"Features","hidden":false},
+          {"type":"fix","section":"Bug Fixes","hidden":false},
+          {"type":"chore","section":"Miscellaneous","hidden":false},
+          {"type":"perf","section":"Performance improvements","hidden":false}]'

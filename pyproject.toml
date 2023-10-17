@@ -1,23 +1,47 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=61", "wheel", "pip-tools", "twine"]
 build-backend = "setuptools.build_meta"
 
-[tool]
-[tool.commitizen]
-name = "cz_conventional_commits"
 
 [project]
-dynamic = ["dependencies", "readme"]
+dynamic = ["readme"]
 name = "owl2shacl"
 version = "0.0.1"
 authors = [{name = "Telicent Ltd", email = "admin@telicent.io"}]
 description = "A CLI tool."
 requires-python = ">=3.11"
 license = {file = "LICENSE.md"}
+dependencies = [
+    "commitizen > 3",
+    "argcomplete >= 3.1.1",
+    "cffi>=1.15.1",
+    "click>=8.1.6",
+    "docutils>=0.20.1",
+    "html5lib>=1.1",
+    "isodate>=0.6.1",
+    "owlrl>=6.0.2",
+    "packaging>=23.1",
+    "pipx>=1.2.0",
+    "prettytable>=2.5.0",
+    "pycparser>=2.21",
+    "pyparsing>=3.1.0",
+    "pyshacl>=0.23.0",
+    "rdflib>=6.3.2",
+    "six>=1.16.0",
+    "typing>=3.7.4.3",
+    "userpath>=1.9.0",
+    "wcwidth>=0.2.6",
+    "webencodings>=0.5.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "flake8", "pre-commit"]
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
 readme = { file = ["src/README.adoc", "introduction.md", "4dOntologyIntro.md", "ies.md"] }
+
+[tool.flake8]
+max-line-length = 120
 
 [project.urls]
 Repository = "https://github.com/Telicent-io/shacl-tool"
@@ -25,11 +49,31 @@ Repository = "https://github.com/Telicent-io/shacl-tool"
 [project.scripts]
 owl2shacl = "src.owl2Shacl:main"
 
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.0.1"
+version_files = ["pyproject.toml:version"]
+tag_format = "v$version"
+
+style = [
+    ["qmark", "fg:#ff9d00 bold"],
+    ["question", "bold"],
+    ["answer", "fg:#ff9d00 bold"],
+    ["pointer", "fg:#ff9d00 bold"],
+    ["highlighted", "fg:#ff9d00 bold"],
+    ["selected", "fg:#cc5454"],
+    ["separator", "fg:#cc5454"],
+    ["instruction", ""],
+    ["text", ""],
+    ["disabled", "fg:#858585 italic"]
+]
+
 [tool.distutils.bdist_wheel]
 universal = true
 
 [tool.setuptools]
-include-package-data = true
+include-package-data = false
 
-[tool.setuptools.packages]
-find = {}
+[tool.setuptools.packages.find]
+include = ["src*"]
+exclude = ["docs*", "test*"]
