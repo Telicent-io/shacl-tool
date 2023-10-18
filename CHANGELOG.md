@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/Telicent-io/shacl-tool/compare/v0.2.2...v0.2.3) (2023-10-18)
+
+
+### Bug Fixes
+
+* Typo causing imports to fail when running as standalone program ([cefffe4](https://github.com/Telicent-io/shacl-tool/commit/cefffe493670b62945cdca46e45d829268d7617d))
+
 ## [0.2.2](https://github.com/Telicent-io/shacl-tool/compare/v0.2.1...v0.2.2) (2023-10-18)
 
 
