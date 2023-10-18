@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/Telicent-io/shacl-tool/compare/v0.2.0...v0.2.1) (2023-10-18)
+
+
+### Bug Fixes
+
+* Import error ([2cf44ad](https://github.com/Telicent-io/shacl-tool/commit/2cf44adcadd29d213b919ad47c60f82bfad9f452))
+
 ## [0.2.0](https://github.com/Telicent-io/shacl-tool/compare/v0.1.0...v0.2.0) (2023-10-17)
 
 
