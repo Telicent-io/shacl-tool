@@ -1,21 +1,23 @@
+from __future__ import annotations
+
 import argparse
-from pathlib import Path
-from typing import Tuple
-from pyshacl import validate
-from rdflib import Graph, RDF, RDFS, SH, OWL, XSD
-from rdflib.compare import isomorphic, graph_diff
-from rdflib.term import URIRef, BNode, Literal, Node
 from itertools import chain
+from pathlib import Path
+
+from pyshacl import validate
+from rdflib import OWL, RDF, RDFS, SH, XSD, Graph
+from rdflib.compare import graph_diff, isomorphic
+from rdflib.term import BNode, Literal, Node, URIRef
 
 SH_CLASS = URIRef("http://www.w3.org/ns/shacl#class")
 SH_OR = URIRef("http://www.w3.org/ns/shacl#or")
 SH_AND = URIRef("http://www.w3.org/ns/shacl#and")
 
 
-def _insert_list_item(sh_graph: Graph, ont_graph: Graph, item: Node, tgt_typ: URIRef) -> Node:
-    bnode = BNode()
-    rest = ont_graph.value(subject=item, predicate=RDF.rest)
-    value = ont_graph.value(subject=item, predicate=RDF.first)
+def _insert_list_item(sh_graph: Graph, ont_graph: Graph, item: Node, tgt_typ: Node) -> Node | None:
+    bnode: Node = BNode()
+    rest: Node = ont_graph.value(subject=item, predicate=RDF.rest) or Node()
+    value: Node = ont_graph.value(subject=item, predicate=RDF.first) or Node()
     sh_graph.add((item, RDF.first, bnode))
     sh_graph.add((bnode, tgt_typ, value))
     sh_graph.add((item, RDF.rest, rest))
@@ -54,7 +56,7 @@ def _create_node_shapes_for_properties(ont_graph, sh_graph, property_type):
     for prop in ont_graph.subjects(predicate=RDF.type, object=property_type):
         # process domains
         prop_shape_base = str(prop)
-        for name, ns in sh_graph.namespaces():
+        for _, ns in sh_graph.namespaces():
             if ns in prop:
                 prop_name = URIRef(prop).removeprefix(ns)
                 capitalized_prop_name = prop_name[0].upper() + prop_name[1:]
@@ -185,11 +187,12 @@ def _create_node_shapes_for_classes(ont_graph: Graph, sh_graph: Graph) -> None:
                     add_restriction(ont_graph, sh_graph, item, restriction_details)
 
 
-def create_shacl(ontology: str | Path | Graph) -> Tuple[Graph, Graph]:
-    if isinstance(ontology, (Path, str)):
+def create_shacl(ontology: str | Path | Graph) -> tuple[Graph, Graph]:
+    if isinstance(ontology, (str, Path)):
         ont_graph = Graph().parse(ontology)
     else:
         ont_graph = ontology
+
     sh_graph = Graph()
     # bind namespaces from ontology to shape graph
     for name, ns in ont_graph.namespaces():
@@ -202,7 +205,7 @@ def create_shacl(ontology: str | Path | Graph) -> Tuple[Graph, Graph]:
     return ont_graph, sh_graph
 
 
-def rdf_validate(data_file: str | Graph, ont_graph: str | Graph, sh_graph: str | Graph) -> Tuple[bool, Graph, str]:
+def rdf_validate(data_file: str | Graph, ont_graph: str | Graph, sh_graph: str | Graph) -> tuple[bool, Graph, str]:
     # run shacl validation
     conforms, results_graph, results_text = validate(data_file,
                                                      shacl_graph=sh_graph,

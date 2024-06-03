@@ -2,17 +2,15 @@
 requires = ["setuptools>=61", "wheel", "pip-tools", "twine"]
 build-backend = "setuptools.build_meta"
 
-
 [project]
 dynamic = ["readme"]
-name = "owl2shacl"
+name = "telicent-owl2shacl"
 version = "0.2.3"
-authors = [{name = "Telicent Ltd", email = "admin@telicent.io"}]
+authors = [{name = "Telicent Ltd", email = "opensource@telicent.io"}]
 description = "A CLI tool."
 requires-python = ">=3.11"
 license = {file = "LICENSE.md"}
 dependencies = [
-    "commitizen > 3",
     "argcomplete >= 3.1.1",
     "cffi>=1.15.1",
     "click>=8.1.6",
@@ -33,15 +31,69 @@ dependencies = [
     "wcwidth>=0.2.6",
     "webencodings>=0.5.1",
 ]
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+]
 
 [project.optional-dependencies]
-dev = ["pytest", "flake8", "pre-commit"]
+dev = [
+    "pre-commit==3.5.0",
+    "ruff==0.1.5",
+    "types-pytz==2023.3.1.1",
+    "types-requests==2.31.0.10",
+    "mypy==1.7.0",
+    "cyclonedx-bom==4.4.3"
+]
 
 [tool.setuptools.dynamic]
 readme = { file = ["shacltool/README.adoc", "introduction.md", "4dOntologyIntro.md", "ies.md"] }
 
-[tool.flake8]
-max-line-length = 120
+[tool.ruff]
+target-version = "py310"
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+    "UP", # pyupgrade
+]
+ignore = [
+    "C901", # too complex
+    "UP038", # isintance | notation
+]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+line-length = 120
 
 [project.urls]
 Repository = "https://github.com/Telicent-io/shacl-tool"
@@ -49,32 +101,17 @@ Repository = "https://github.com/Telicent-io/shacl-tool"
 [project.scripts]
 owl2shacl = "shacltool.owl2shacl:main"
 
-[tool.commitizen]
-name = "cz_conventional_commits"
-version = "0.0.1"
-version_files = ["pyproject.toml:version"]
-tag_format = "v$version"
-
-style = [
-    ["qmark", "fg:#ff9d00 bold"],
-    ["question", "bold"],
-    ["answer", "fg:#ff9d00 bold"],
-    ["pointer", "fg:#ff9d00 bold"],
-    ["highlighted", "fg:#ff9d00 bold"],
-    ["selected", "fg:#cc5454"],
-    ["separator", "fg:#cc5454"],
-    ["instruction", ""],
-    ["text", ""],
-    ["disabled", "fg:#858585 italic"]
-]
-
 [tool.distutils.bdist_wheel]
 universal = true
 
 [tool.setuptools]
 include-package-data = false
 
-
 [tool.setuptools.packages.find]
 include = ["shacltool*"]
 exclude = ["docs*", "test*"]
+
+[tool.mypy]
+no_implicit_optional = false
+ignore_missing_imports = true
+modules = ["shacltool", "test"]
