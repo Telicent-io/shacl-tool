@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 dynamic = ["readme"]
 name = "telicent-owl2shacl"
-version = "0.2.3"
+version = "0.2.4"
 authors = [{name = "Telicent Ltd", email = "opensource@telicent.io"}]
 description = "A CLI tool."
 requires-python = ">=3.11"
