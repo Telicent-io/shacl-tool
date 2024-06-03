@@ -188,7 +188,7 @@ def _create_node_shapes_for_classes(ont_graph: Graph, sh_graph: Graph) -> None:
 
 
 def create_shacl(ontology: str | Path | Graph) -> tuple[Graph, Graph]:
-    if isinstance(ontology, (str, Path)):
+    if isinstance(ontology, (Path, str)):
         ont_graph = Graph().parse(ontology)
     else:
         ont_graph = ontology
