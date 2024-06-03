@@ -12,3 +12,5 @@ permissions:
 jobs:
   create-release-pr:
     uses: telicent-oss/shared-workflows/.github/workflows/python-create-release-pr.yml@main
+    with:
+      DEFAULT_BRANCH: feature/owl2shacl
