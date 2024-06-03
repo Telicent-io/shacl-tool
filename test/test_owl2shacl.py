@@ -1,11 +1,13 @@
+import logging
 import sys
 import unittest
-import logging
 from pathlib import Path
+
+from rdflib import OWL, RDF, RDFS, SH, XSD, BNode, Graph, Literal, Namespace
 from rdflib.compare import isomorphic
-from shacltool.owl2shacl import create_shacl, rdf_validate
-from rdflib import Graph, SH, BNode, RDF, XSD, Literal, Namespace, OWL, RDFS
 from rdflib.term import URIRef
+
+from shacltool.owl2shacl import create_shacl, rdf_validate
 
 IES = Namespace("http://ies.data.gov.uk/ontology/ies4#")
 DATA = Namespace("http://data.gov.uk/testdata#")
@@ -32,7 +34,7 @@ class TestOwl2Shacl(unittest.TestCase):
         conforms, results_graph, results_text = rdf_validate(
             "Sample Data/hospital.ttl", ont_graph, sh_graph)
         self.assertTrue(conforms)
-        self.assertEquals("Validation Report\nConforms: True\n", results_text)
+        self.assertEqual("Validation Report\nConforms: True\n", results_text)
         assert isomorphic(expected_result, results_graph)
 
     # @unittest.skip("done")
