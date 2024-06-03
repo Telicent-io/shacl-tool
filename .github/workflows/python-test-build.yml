@@ -19,3 +19,4 @@ jobs:
     uses: telicent-oss/shared-workflows/.github/workflows/python-ci-qa.yml@main
     with:
       PYTHON_VERSION: ${{ matrix.python-version }}
+      TEST_COMMAND: "pytest"
