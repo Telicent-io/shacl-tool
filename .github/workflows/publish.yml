@@ -3,7 +3,7 @@ name: Release to PyPI
 on:
   push:
     branches:
-      - "master"
+      - "feature/owl2shacl"
     paths:
       - "CHANGELOG.md"
   workflow_dispatch:

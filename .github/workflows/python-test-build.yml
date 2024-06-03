@@ -6,7 +6,7 @@ on:
       - "release-please*"
   push:
     branches-ignore:
-      - "master"
+      - "feature/owl2shacl"
   workflow_dispatch:
 
 jobs:
