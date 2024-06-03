@@ -3,13 +3,13 @@ requires = ["setuptools>=61", "wheel", "pip-tools", "twine"]
 build-backend = "setuptools.build_meta"
 
 [project]
-dynamic = ["readme"]
 name = "telicent-owl2shacl"
 version = "0.2.4"
 authors = [{name = "Telicent Ltd", email = "opensource@telicent.io"}]
-description = "A CLI tool."
+description = "Tool for generating shacl and validating instance data against that shacl and ontology."
 requires-python = ">=3.11"
 license = {file = "LICENSE.md"}
+readme = "README.md"
 dependencies = [
     "argcomplete >= 3.1.1",
     "cffi>=1.15.1",
@@ -52,9 +52,6 @@ dev = [
     "pytest==8.2.1",
     "cyclonedx-bom==4.4.3"
 ]
-
-[tool.setuptools.dynamic]
-readme = { file = ["shacltool/README.adoc", "introduction.md", "4dOntologyIntro.md", "ies.md"] }
 
 [tool.ruff]
 target-version = "py310"
