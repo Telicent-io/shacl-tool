@@ -1,0 +1,22 @@
+name: Python Test Build
+
+on:
+  pull_request:
+    branches:
+      - "release-please*"
+  push:
+    branches-ignore:
+      - "master"
+  workflow_dispatch:
+
+jobs:
+  test-and-build:
+    name: Python Test and Build
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ["3.11", "3.12"]
+    uses: telicent-oss/shared-workflows/.github/workflows/python-ci-qa.yml@main
+    with:
+      PYTHON_VERSION: ${{ matrix.python-version }}
+      TEST_COMMAND: "pytest"

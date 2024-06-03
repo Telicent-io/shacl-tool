@@ -1,0 +1,81 @@
+name: Release to PyPI
+
+on:
+  push:
+    branches:
+      - "master"
+    paths:
+      - "CHANGELOG.md"
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Python Tests
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ["3.11", "3.12"]
+    uses: telicent-oss/shared-workflows/.github/workflows/python-ci-qa.yml@main
+    with:
+      PYTHON_VERSION: ${{ matrix.python-version }}
+      SKIP_BUILD: true
+
+  get-version:
+    uses: telicent-oss/shared-workflows/.github/workflows/python-get-version-number.yml@main
+
+  build-pypi-pkg:
+    name: Prepare and Build Release
+    uses: telicent-oss/shared-workflows/.github/workflows/python-build-pypi-pkg.yml@main
+    needs:
+      - get-version
+    with:
+      PACKAGE: shacltool
+      VERSION: ${{ needs.get-version.outputs.version }}
+
+  publish-to-pypi:
+    name: Publish Python distribution to PyPI
+    needs:
+    - build-pypi-pkg
+    - test
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/telicent-owl2shacl
+    permissions:
+      id-token: write
+    steps:
+    - name: Download all the dists
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ needs.build-pypi-pkg.outputs.application-sbom-artifact-name }}-dist
+        path: dist/
+
+    - name: Publish distribution to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/
+
+  do-github-release:
+    name: Do GitHub Release
+    uses: telicent-oss/shared-workflows/.github/workflows/python-gh-release.yml@main
+    needs:
+      - get-version
+      - test
+      - build-pypi-pkg
+    with:
+      VERSION: ${{ needs.get-version.outputs.version }}
+
+  attach-sboms-to-release:
+    name: Attach SBOMs to release
+    needs:
+      - do-github-release
+      - get-version
+      - build-pypi-pkg
+    strategy:
+      matrix:
+        sbom-artifacts:
+         - ${{ needs.build-pypi-pkg.outputs.application-sbom-artifact-name }}
+    uses: telicent-oss/shared-workflows/.github/workflows/python-attach-sbom-to-release.yml@main
+    with:
+      SBOM_ARTIFACT: ${{ matrix.sbom-artifacts }}
+      VERSION: ${{ needs.get-version.outputs.version }}

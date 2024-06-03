@@ -1,0 +1,115 @@
+[build-system]
+requires = ["setuptools>=61", "wheel", "pip-tools", "twine"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "telicent-owl2shacl"
+version = "0.2.4"
+authors = [{name = "Telicent Ltd", email = "opensource@telicent.io"}]
+description = "Tool for generating shacl and validating instance data against that shacl and ontology."
+requires-python = ">=3.11"
+license = {file = "LICENSE.md"}
+readme = "README.md"
+dependencies = [
+    "argcomplete >= 3.1.1",
+    "cffi>=1.15.1",
+    "click>=8.1.6",
+    "docutils>=0.20.1",
+    "html5lib>=1.1",
+    "isodate>=0.6.1",
+    "owlrl>=6.0.2",
+    "packaging>=23.1",
+    "pipx>=1.2.0",
+    "prettytable>=2.5.0",
+    "pycparser>=2.21",
+    "pyparsing>=3.1.0",
+    "pyshacl>=0.23.0",
+    "rdflib>=6.3.2",
+    "six>=1.16.0",
+    "typing>=3.7.4.3",
+    "userpath>=1.9.0",
+    "wcwidth>=0.2.6",
+    "webencodings>=0.5.1",
+]
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit==3.5.0",
+    "ruff==0.1.5",
+    "types-pytz==2023.3.1.1",
+    "types-requests==2.31.0.10",
+    "mypy==1.7.0",
+    "pytest==8.2.1",
+    "cyclonedx-bom==4.4.3"
+]
+
+[tool.ruff]
+target-version = "py310"
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+    "UP", # pyupgrade
+]
+ignore = [
+    "C901", # too complex
+    "UP038", # isintance | notation
+]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+line-length = 120
+
+[project.urls]
+Repository = "https://github.com/Telicent-io/shacl-tool"
+
+[project.scripts]
+owl2shacl = "shacltool.owl2shacl:main"
+
+[tool.distutils.bdist_wheel]
+universal = true
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ["shacltool*"]
+exclude = ["docs*", "test*"]
+
+[tool.mypy]
+no_implicit_optional = false
+ignore_missing_imports = true
+modules = ["shacltool", "test"]

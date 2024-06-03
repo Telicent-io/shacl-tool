@@ -1,0 +1,52 @@
+= Dev helper
+// tag::body[]
+
+== Try it out
+
+Run this command from the project root. Ensure you have python3 installed along with pyschacl and rdflib.
+
+
+`python3 src/owl2Shacl.py -o "IES Specification Docs/Information Exchange Standard r4.2.0.n3" -s "IES Specification Docs/IES4shapes.ttl"`
+
+A shacl shape file will be generated and placed in the IES Specification Docs directory
+
+== Run the tests
+
+Run `pytest` from the project root.
+
+== General usage
+
+owl2shacl supports command line use, as shown above, but also allows for the direct use of the two main functions create_shacl and rdf_validate.
+
+=== create_shacl
+This function takes a single argument which is the ontology file or graph and returns the generated shacl_shapes graph and also the ontology graph.
+Currently this function will handle the creation of node shapes for the following:
+
+* Named classes with  property shapes for any associated restrictions. The shapes are named after the class with a suffix of Shape.
+* Domain shapes for any domain restrictions on the properties in the ontology.
+* Range shapes for any range restrictions on the properties in the ontology.
+
+It does not yet support the creation of shapes based on general axioms or disjoints within the ontology.
+
+=== rdf_validate
+This is a simple wrapper around the pyschal.validate function and can be used to validate a data graph against the ontology and shacl shapes. It takes the data graph, ontology graph and data graph as either graphs or file paths to serialised rdf. It returns conforms(a boolean of whether the data has passed validation, results_graph (a graph containing details of any failures) and results_text which is a human readable summary of the results.
+
+=== Command line Usage
+When invoked from the command line owl2shacl takes up to 4 arguments, the first 3 of which are:
+
+-o, --ontology which should be the path to the serialised ontology
+
+-s, --shacl which should be the path to where the shacl shape is located or should be saved to.
+
+-v, --validate which should be the path to the data to be validated.
+
+To create a shacl shape graph, just the -s and -o options should be used.
+To validate a data graph against the ontology and shapes all three should be supplied.
+
+There is an additional option -d, --dry run. This will create a new shacl shape graph but rather than overwrite the previous version, it will display a summary of the changes that would occur.
+
+
+
+
+
+// end::body[]
