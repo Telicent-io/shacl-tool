@@ -3,7 +3,7 @@ name: Create release PR
 on:
   push:
     branches:
-      - "feature/owl2shacl"
+      - "master"
 
 permissions:
   contents: write
