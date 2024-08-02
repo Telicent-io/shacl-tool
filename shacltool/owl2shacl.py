@@ -213,7 +213,7 @@ def rdf_validate(data_file: str | Graph, ont_graph: str | Graph, sh_graph: str |
                                                      inference='none',
                                                      abort_on_first=False,
                                                      allow_infos=False,
-                                                     allow_warnings=False,
+                                                     allow_warnings=True,
                                                      meta_shacl=False,
                                                      advanced=True,
                                                      js=False,
