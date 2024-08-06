@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - "master"
+  workflow_dispatch:
+
 
 permissions:
   contents: write
@@ -13,4 +15,4 @@ jobs:
   create-release-pr:
     uses: telicent-oss/shared-workflows/.github/workflows/python-create-release-pr.yml@main
     with:
-      DEFAULT_BRANCH: feature/owl2shacl
+      DEFAULT_BRANCH: master
