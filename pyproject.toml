@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "telicent-owl2shacl"
-version = "0.2.4"
+version = "0.2.5"
 authors = [{name = "Telicent Ltd", email = "opensource@telicent.io"}]
 description = "Tool for generating shacl and validating instance data against that shacl and ontology."
 requires-python = ">=3.11"

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/Telicent-io/shacl-tool/compare/v0.2.4...v0.2.5) (2024-08-06)
+
+
+### Bug Fixes
+
+* allow shacl warnings ([#17](https://github.com/Telicent-io/shacl-tool/issues/17)) ([6233ea3](https://github.com/Telicent-io/shacl-tool/commit/6233ea37b5a3294277a4eccfa842cefb675bc701))
+
 ## [0.2.4](https://github.com/Telicent-io/shacl-tool/compare/v0.2.3...v0.2.4) (2024-06-03)
 
 
